@@ -22,7 +22,7 @@ public class App
 
         channel.queueDeclare(INPUT_QUEUE_NAME, false, false, false, null);
 
-        String message = "Hello World!";
+        String message = "102*40*3";
         channel.basicPublish("", INPUT_QUEUE_NAME, null, message.getBytes());
         System.out.println(" [x] Sent '" + message + "'");
 
