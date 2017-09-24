@@ -9,32 +9,28 @@ public class App
 {
     private final static String INPUT_QUEUE_NAME = "myinput";
 
+    public static Channel connect() throws Exception {
+      ConnectionFactory factory = new ConnectionFactory();
+      factory.setHost("172.17.0.2");
+      factory.setUsername("guest");
+      factory.setPassword("guest");
+      Connection connection = factory.newConnection();
+      return connection.createChannel();
+    }
+
     public static void main( String[] args ) {
-      Connection connection = null;
-      Channel channel = null;
+      final Channel channel;
       try {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("172.17.0.2");
-        factory.setUsername("guest");
-        factory.setPassword("guest");
-        connection = factory.newConnection();
-        channel = connection.createChannel();
+        channel = connect();
 
         channel.queueDeclare(INPUT_QUEUE_NAME, false, false, false, null);
 
-        String message = "102*40*3";
+        String message = "100/4";
         channel.basicPublish("", INPUT_QUEUE_NAME, null, message.getBytes());
         System.out.println(" [x] Sent '" + message + "'");
 
       } catch (Exception e) {
         e.printStackTrace();
-      } finally {
-        try {
-          if(channel != null) channel.close();
-          if(connection != null) connection.close();
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
       }
     }
 }
